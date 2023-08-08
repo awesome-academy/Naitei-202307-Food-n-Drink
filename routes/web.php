@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -27,5 +28,7 @@ Route::get('/dashboard', function () {
 Route::get('/test', function () {
     return view('test');
 });
+
+Route::resource('/products', ProductController::class);
 
 require __DIR__ . '/auth.php';

@@ -2,7 +2,7 @@
 
 namespace App\Enums;
 
-use BenSampo\Enum\Enum;
+use Illuminate\Validation\Rules\Enum;
 
 final class UserRole extends Enum
 {
