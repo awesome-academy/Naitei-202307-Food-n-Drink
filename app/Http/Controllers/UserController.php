@@ -7,6 +7,7 @@ use App\Http\Requests\User\DeleteUserRequest;
 use App\Http\Requests\User\UpdateUserRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
@@ -45,6 +46,8 @@ class UserController extends Controller
 
     public function show(User $user)
     {
+        $user->load('contacts');
+
         return view('users.show')->with('user', $user);
     }
 
@@ -66,7 +69,12 @@ class UserController extends Controller
 
     public function destroy(DeleteUserRequest $request, User $user)
     {
-        $user->delete();
+        DB::transaction(function () use ($user) {
+            $user->load('contacts');
+            $user->contacts()->delete();
+            $user->delete();
+        });
+
         return redirect()->route('users.index')->with('success', trans('user.destroy.success'));
     }
 }

@@ -7,8 +7,7 @@
             <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
                 <div class="border-b border-gray-200 bg-white p-6 ">
                     <div class="flex items-center justify-end">
-                        <a href="{{ route('users.create') }} "
-                            class="mr-2 button primary">
+                        <a href="{{ route('users.create') }} " class="mr-2 button primary">
                             {{ __('user.button') }}
                         </a>
                     </div>
@@ -48,20 +47,18 @@
                                             {{ $user->created_at }}
                                         </td>
                                         <td class="flex justify-evenly border px-4 py-2">
-                                            <a href="{{ route('users.show', $user->id) }}"
-                                                class="button primary">
+                                            <a href="{{ route('users.show', $user->id) }}" class="button primary">
                                                 {{ __('View') }}
                                             </a>
-                                            <a href="{{ route('users.edit', $user->id) }}"
-                                                class="button edit">
+                                            <a href="{{ route('users.edit', $user->id) }}" class="button edit">
                                                 {{ __('Edit') }}
                                             </a>
-                                            <form method="POST"
-                                                action="{{ route('users.destroy', $user->id) }}" class="button delete">
+                                            <form method="POST" action="{{ route('users.destroy', $user->id) }}"
+                                                class="button delete">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit"
-                                                    data-confirm="{{ __('global.Confirm Delete') }}">{{ __('Delete') }}</button>
+                                                    data-confirm="{{ __('Confirm Delete') }}">{{ __('Delete') }}</button>
                                             </form>
                                         </td>
                                     </tr>
