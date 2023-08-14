@@ -32,4 +32,6 @@ Route::resource('/contacts', ContactController::class)->middleware(['auth', 'ver
 Route::resource('/products', ProductController::class);
 Route::resource('/cart', CartController::class);
 
+Route::resource('/products', ProductController::class);
+
 require __DIR__ . '/auth.php';

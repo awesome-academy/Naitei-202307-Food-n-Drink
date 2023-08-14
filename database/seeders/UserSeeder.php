@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Enums\UserRole;
 use App\Models\User;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 class UserSeeder extends Seeder
@@ -16,7 +16,7 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        for($i = 0; $i < 5; ++$i) {
+        for ($i = 0; $i < 5; ++$i) {
             User::create([
                 'username' => 'user' . $i . '-account',
                 'first_name' => 'user' . $i,
@@ -24,13 +24,13 @@ class UserSeeder extends Seeder
                 'email' => 'user' . $i . '.account@sun-asterisk.com',
                 'password' => bcrypt('12345678'),
                 'is_active' => true,
-                'role' => 'user',
+                'role' => UserRole::ROLE_USER,
                 'email_verified_at' => now(),
                 'remember_token' => Str::random(10),
             ]);
         }
 
-        for($i = 0; $i < 5; ++$i) {
+        for ($i = 0; $i < 5; ++$i) {
             User::create([
                 'username' => 'salesman' . $i . '-account',
                 'first_name' => 'salesman' . $i,
@@ -38,7 +38,7 @@ class UserSeeder extends Seeder
                 'email' => 'salesman' . $i . '.account@sun-asterisk.com',
                 'password' => bcrypt('12345678'),
                 'is_active' => true,
-                'role' => 'salesman',
+                'role' => UserRole::ROLE_SALESMAN,
                 'email_verified_at' => now(),
                 'remember_token' => Str::random(10),
             ]);

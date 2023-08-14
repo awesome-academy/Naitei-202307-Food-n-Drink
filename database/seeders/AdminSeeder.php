@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Enums\UserRole;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -18,7 +19,7 @@ class AdminSeeder extends Seeder
     {
         User::create([
             'username' => 'admin' . '-account',
-            'first_name' => 'admin',
+            'first_name' => UserRole::ROLE_ADMIN,
             'last_name' => 'account',
             'email' => 'admin.account@sun-asterisk.com',
             'password' => bcrypt('12345678'),
