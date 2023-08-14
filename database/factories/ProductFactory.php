@@ -23,6 +23,7 @@ class ProductFactory extends Factory
             'number_in_stock' => $this->faker->numberBetween(0, 50),
             'number_of_rate' => $this->faker->numberBetween(0, 50),
             'rate' => $this->faker->randomFloat(1, 1, 5),
+            'salesman_id' => $this->faker->numberBetween(7, 11),
         ];
     }
 }
