@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 
@@ -30,5 +31,6 @@ Route::get('/test', function () {
 });
 
 Route::resource('/products', ProductController::class);
+Route::resource('/cart', CartController::class);
 
 require __DIR__ . '/auth.php';
