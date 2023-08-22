@@ -25,11 +25,22 @@
                         </div>
                     </div>
                     <div class="mb-4">
-                        <label class="mb-2 block text-sm font-bold text-gray-700"
-                            for="fullname">{{ __('user.fullname') }}:</label>
-                        <input
-                            class="h-10 focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 focus:outline-none"
-                            id="fullname" name="fullname" type="text">
+                        <div class="mb-4 mr-8 flex">
+                            <div class="mr-4">
+                                <label class="mb-2 block text-sm font-bold text-gray-700"
+                                    for="first_name">{{ __('user.firstName') }}</label>
+                                <input
+                                    class="h-10 focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 focus:outline-none"
+                                    id="first_name" name="first_name" type="text">
+                            </div>
+                            <div class="mr-4">
+                                <label class="mb-2 block text-sm font-bold text-gray-700"
+                                    for="last_name">{{ __('user.lastName') }}</label>
+                                <input
+                                    class="h-10 focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 focus:outline-none"
+                                    id="last_name" name="last_name" type="text">
+                            </div>
+                        </div>
                     </div>
                     <div class="mb-4">
                         <label class="mb-2 block text-sm font-bold text-gray-700" for="email">Email:</label>
