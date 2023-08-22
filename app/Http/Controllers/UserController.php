@@ -6,40 +6,40 @@ use App\Http\Requests\User\CreateUserRequest;
 use App\Http\Requests\User\DeleteUserRequest;
 use App\Http\Requests\User\UpdateUserRequest;
 use App\Models\User;
+use App\Repositories\User\UserRepository;
+use App\Repositories\User\UserRepositoryInterface;
+use App\Support\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
     const DEFAULT_LIMIT = 10;
+    private $userRepo;
 
-    public function __construct()
+    public function __construct(UserRepositoryInterface $userRepository)
     {
         $this->middleware(['auth', 'checkAdmin'], ['only' => ['index', 'create', 'store']]);
+        $this->userRepo = $userRepository;
     }
 
     public function index(Request $request)
     {
         $page = $request->input('page');
-        $users = User::orderBy('created_at')->paginate(self::DEFAULT_LIMIT, ['*'], 'page', $page ?? 1);
+        $users = $this->userRepo->getAllWithOrderAndPaginate('created_at', config('app.pagination.per_page'), $page);
 
         return view('users.index')->with('users', $users);
     }
 
-    public function showUserProducts(User $user)
+    public function showUserProducts(Request $request, User $user)
     {
-        if ($user->role === 'ADMIN') {
-            $products = DB::table('products')->where('number_in_stock', '>', '-1')
-                ->orderBy('id', 'desc')
-                ->paginate(config('app.pagination.per_page'));
-        } else {
-            $products = DB::table('products')->where('salesman_id', $user->id)
-                ->where('number_in_stock', '>', '-1')
-                ->orderBy('id', 'desc')
-                ->paginate(config('app.pagination.per_page'));
-        }
+        $page = $request->input('page');
+        $user->load('products');
+        $products = $this->userRepo->getProductOfUser($user, $user->role, 'desc');
+        $results = (new Collection($products))
+            ->paginate(config('app.pagination.per_page'), $products->count(), $page ?? 1);
 
-        return view('users.products')->with('products', $products);
+        return view('users.products')->with('products', $results);
     }
 
     public function create()
@@ -49,15 +49,10 @@ class UserController extends Controller
 
     public function store(CreateUserRequest $request)
     {
-        $user = new User;
         $validated = $request->validated();
-        $user->fullName = $validated['fullname'];
-        $user->email = $validated['email'];
-        $user->username = $validated['username'];
-        $user->password = bcrypt($validated['password']);
-        $user->role = $validated['role'];
-        $user->is_active = true;
-        $user->save();
+        $validated['password'] = bcrypt($validated['password']);
+        $validated['is_active'] = true;
+        $this->userRepo->create($validated);
 
         return redirect()->route('users.index')->with('success', trans('user.store.success'));
     }
@@ -77,19 +72,14 @@ class UserController extends Controller
     public function update(UpdateUserRequest $request, User $user)
     {
         $validated = $request->validated();
-        $user->fill($validated);
-        $user->save();
+        $this->userRepo->update($user->id, $validated);
 
         return redirect()->route('users.show', ['user' => $user->id])->with('success', trans('user.update.success'));
     }
 
     public function destroy(DeleteUserRequest $request, User $user)
     {
-        DB::transaction(function () use ($user) {
-            $user->load('contacts');
-            $user->contacts()->delete();
-            $user->delete();
-        });
+        $this->userRepo->delete($user);
 
         return redirect()->route('users.index')->with('success', trans('user.destroy.success'));
     }
